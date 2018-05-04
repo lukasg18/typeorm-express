@@ -23,13 +23,7 @@
 import * as http from 'http';
 import * as debug from 'debug';
 
-import App from './App';
-
+import {app} from './App';
 debug('ts-express:server');
-
 const port = process.env.PORT || 3000;
-App.set('port', port);
-
-http.createServer(App).listen(port);
-
-
+http.createServer(app).listen(port, () => console.log('Server started on port ' + port));

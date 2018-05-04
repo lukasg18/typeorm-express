@@ -1,39 +1,20 @@
-import * as path from 'path';
-import * as express from 'express';
-import * as logger from 'morgan';
-import * as bodyParser from 'body-parser';
+import * as path from "path";
+import * as express from "express";
+import * as morgan from "morgan";
+import * as bodyParser from "body-parser";
+import { createExpressServer } from "routing-controllers";
 
 // Creates and configures an ExpressJS web server.
-class App {
 
-  // ref to Express instance
-  public express: express.Application;
+// ref to Express instance
+const config: express.Application = express();
 
-  //Run configuration methods on the Express instance.
-  constructor() {
-    this.express = express();
-    this.middleware();
-    this.routes();
-  }
+config.use(morgan("dev"));
+config.use(bodyParser.json());
+config.use(bodyParser.urlencoded({ extended: false }));
 
-  // Configure Express middleware.
-  private middleware(): void {
-    this.express.use(logger('dev'));
-    this.express.use(bodyParser.json());
-    this.express.use(bodyParser.urlencoded({ extended: false }));
-  }
+const app = createExpressServer({
+  controllers: [] // we specify controllers we want to use
+});
 
-  // Configure API endpoints.
-  private routes(): void {
-    let router = express.Router();
-    router.get('/', (req, res, next) => {
-      res.json({
-        message: 'Hello World!'
-      });
-    });
-    this.express.use('/', router);
-  }
-
-}
-
-export default new App().express;
+export { app };
